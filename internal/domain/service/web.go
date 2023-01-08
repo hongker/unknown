@@ -17,7 +17,7 @@ func NewWebService(userApp *application.UserApp) *WebService {
 	}
 }
 
-func (service WebService) Login(ctx context.Context, req *api.LoginRequest) (resp *api.LoginResponse, err error) {
+func (service WebService) Login(ctx context.Context, req *api.WebLoginRequest) (resp *api.WebLoginResponse, err error) {
 	user, lastErr := service.userApp.Login(ctx, req.Phone)
 	if lastErr != nil {
 		err = errors.Convert(lastErr).WithMessage("login user")
@@ -30,7 +30,7 @@ func (service WebService) Login(ctx context.Context, req *api.LoginRequest) (res
 		return
 	}
 
-	resp = &api.LoginResponse{
+	resp = &api.WebLoginResponse{
 		UserID: user.ID,
 		Token:  token,
 	}

@@ -1,24 +1,32 @@
 package handler
 
-import "github.com/ebar-go/znet"
+import (
+	"github.com/ebar-go/znet"
+	"unknown/api"
+	"unknown/internal/domain/service"
+)
 
-type LoginRequest struct{}
-type LoginResponse struct{}
+type GateHandler struct {
+	gateService *service.GateService
+}
 
-func LoginHandler(ctx *znet.Context, req *LoginRequest) (resp *LoginResponse, err error) {
+func NewGateHandler(gateService *service.GateService) *GateHandler {
+	return &GateHandler{
+		gateService: gateService,
+	}
+}
+
+func (handler *GateHandler) Login(ctx *znet.Context, req *api.GateLoginRequest) (resp *api.GateLoginResponse, err error) {
+	return handler.gateService.Login(ctx, req)
+}
+
+func (handler *GateHandler) Heartbeat(ctx *znet.Context, req *api.GateHeartbeatRequest) (resp *api.GateHeartbeatResponse, err error) {
 	return
 }
 
-type HeartbeatRequest struct{}
-type HeartbeatResponse struct{}
-
-func HeartbeatHandler(ctx *znet.Context, req *HeartbeatRequest) (resp *HeartbeatResponse, err error) {
-	return
-}
-
-func OpenHandler(connection *znet.Connection) {
+func (handler *GateHandler) Open(connection *znet.Connection) {
 
 }
-func CloseHandler(connection *znet.Connection) {
+func (handler *GateHandler) Close(connection *znet.Connection) {
 
 }

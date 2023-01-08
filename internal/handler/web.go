@@ -68,6 +68,6 @@ func NewWebHandler(webService *service.WebService) *WebHandler {
 		webService: webService,
 	}
 }
-func (handler WebHandler) Login(ctx context.Context, req *api.LoginRequest) (resp *api.LoginResponse, err error) {
+func (handler WebHandler) Login(ctx context.Context, req *api.WebLoginRequest) (resp *api.WebLoginResponse, err error) {
 	return handler.webService.Login(ctx, req)
 }

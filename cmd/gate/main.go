@@ -4,6 +4,7 @@ import (
 	"github.com/ebar-go/ego/utils/runtime/signal"
 	"github.com/ebar-go/znet"
 	"unknown/api"
+	"unknown/internal/domain/service"
 	"unknown/internal/handler"
 )
 
@@ -20,14 +21,15 @@ func NewOptions() Options {
 }
 
 func main() {
+	gateHandler := handler.NewGateHandler(service.Provider().Gate())
 	server := znet.New(func(options *znet.Options) {
-		options.OnOpen = handler.OpenHandler
-		options.OnClose = handler.CloseHandler
+		options.OnOpen = gateHandler.Open
+		options.OnClose = gateHandler.Close
 	})
 	options := NewOptions()
 
-	server.Router().Route(api.ActionLogin, znet.StandardHandler(handler.LoginHandler))
-	server.Router().Route(api.ActionHeartbeat, znet.StandardHandler(handler.HeartbeatHandler))
+	server.Router().Route(api.ActionLogin, znet.StandardHandler(gateHandler.Login))
+	server.Router().Route(api.ActionHeartbeat, znet.StandardHandler(gateHandler.Heartbeat))
 
 	server.ListenTCP(options.TCPAddr)
 	server.ListenWebsocket(options.WebsocketAddr)
