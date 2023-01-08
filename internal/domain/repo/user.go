@@ -2,6 +2,7 @@ package repo
 
 import (
 	"context"
+	"github.com/ebar-go/ego/component"
 	"github.com/ebar-go/ego/component/db"
 	"unknown/internal/domain/entity"
 )
@@ -11,7 +12,7 @@ type UserRepo struct {
 }
 
 func NewUserRepo() *UserRepo {
-	return &UserRepo{}
+	return &UserRepo{database: component.DB()}
 }
 
 func (repo *UserRepo) Create(ctx context.Context, item *entity.UserEntity) error {

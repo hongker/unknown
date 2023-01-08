@@ -11,7 +11,14 @@ import (
 
 type UserApp struct {
 	userRepo *repo.UserRepo
-	sign     []byte
+}
+
+var (
+	sign []byte
+)
+
+func SetSign(b []byte) {
+	sign = b
 }
 
 func NewUserApp(userRepo *repo.UserRepo) *UserApp {
@@ -31,7 +38,7 @@ type UserClaims struct {
 }
 
 func (app *UserApp) GenToken(ctx context.Context, user *entity.UserEntity) (token string, err error) {
-	token, err = component.JWT().GenerateToken(app.sign, &UserClaims{
+	token, err = component.JWT().GenerateToken(sign, &UserClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour)),
 		},
@@ -42,7 +49,7 @@ func (app *UserApp) GenToken(ctx context.Context, user *entity.UserEntity) (toke
 }
 
 func (app *UserApp) Auth(ctx context.Context, token string) (user *entity.UserEntity, err error) {
-	claims, err := component.JWT().ParseToken(app.sign, token)
+	claims, err := component.JWT().ParseToken(sign, token)
 	if err != nil {
 		return
 	}
